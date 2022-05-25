@@ -27,12 +27,13 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  cached_network_image: ^3.2.0
+  cached_network_image: ^3.2.1
   cupertino_icons: ^1.0.2
   faker: ^2.0.0
   flutter:
     sdk: flutter
   intl: ^0.17.0
+  provider: ^6.0.3
 
 dev_dependencies:
   flutter_lints: ^1.0.0
