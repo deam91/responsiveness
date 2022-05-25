@@ -17,7 +17,7 @@ final emails = [
       subject: faker.lorem.sentence(),
       date: faker.date.dateTime(minYear: 2021, maxYear: 2022),
       body: faker.lorem
-          .sentences(faker.randomGenerator.integer(10, min: 5))
-          .join('\n'),
+          .sentences(faker.randomGenerator.integer(15, min: 3))
+          .join(' '),
     ),
 ]..sort((a, b) => b.date.compareTo(a.date));
