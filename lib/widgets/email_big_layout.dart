@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:responsiveness/data.dart';
 import 'package:responsiveness/models/email.dart';
 import 'package:responsiveness/notifiers/email_change_notifier.dart';
@@ -86,9 +87,21 @@ class _EmailBigLayoutState extends State<EmailBigLayout> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             EmailDeliveryInfo(email: email),
-                            IconButton(
-                              onPressed: () {},
-                              icon: const Icon(Icons.star_border),
+                            Consumer<EmailChangeNotifier>(
+                              builder: (context, value, child) {
+                                return IconButton(
+                                  onPressed: () {
+                                    _controller.setPinnedEmail(email);
+                                    setState(() {});
+                                  },
+                                  icon: _controller.pinnedEmail == email
+                                      ? const Icon(
+                                          Icons.star_outlined,
+                                          color: Colors.orange,
+                                        )
+                                      : const Icon(Icons.star_border),
+                                );
+                              },
                             ),
                           ],
                         ),
@@ -130,6 +143,7 @@ class _EmailBigLayoutState extends State<EmailBigLayout> {
                           onPin: () {
                             _controller
                                 .setPinnedEmail(_controller.selectedEmail!);
+                            setState(() {});
                           },
                           pinned: _controller.pinnedEmail ==
                               _controller.selectedEmail!,
