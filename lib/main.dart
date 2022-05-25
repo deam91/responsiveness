@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:responsiveness/data.dart';
-import 'package:responsiveness/widgets/widgets.dart';
+import 'package:provider/provider.dart';
+import 'package:responsiveness/notifiers/email_change_notifier.dart';
+
+import 'widgets/email_big_layout.dart';
+import 'widgets/email_small_layout.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,9 +14,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
+      theme: ThemeData(useMaterial3: true),
       title: 'Responsiveness',
-      home: MyHomePage(),
+      home: ChangeNotifierProvider(
+          create: (_) => EmailChangeNotifier(), child: const MyHomePage()),
     );
   }
 }
@@ -24,50 +29,30 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Builder(builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ListView.builder(
-            itemCount: emails.length,
-            itemBuilder: (context, index) {
-              final email = emails[index];
-              return InkWell(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => EmailDetails(email: email),
-                    ),
+      body: SafeArea(
+        child: Builder(
+          builder: (context) {
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Consumer<EmailChangeNotifier>(
+                builder: (context, value, child) {
+                  return LayoutBuilder(
+                    builder: (context, constraints) {
+                      var bigScreen = constraints.maxWidth > 600;
+                      if (bigScreen) {
+                        return EmailBigLayout(
+                          constraints: constraints,
+                        );
+                      }
+                      return const EmailSmallLayout();
+                    },
                   );
                 },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Row(
-                    children: [
-                      SenderAvatar(sender: email.sender),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: EmailPreview(email: email),
-                        ),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          EmailDeliveryInfo(email: email),
-                          IconButton(
-                            onPressed: () {},
-                            icon: const Icon(Icons.star_border),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
-        );
-      }),
+              ),
+            );
+          },
+        ),
+      ),
     );
   }
 }
