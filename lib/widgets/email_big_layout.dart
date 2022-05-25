@@ -20,7 +20,7 @@ class EmailBigLayout extends StatefulWidget {
 class _EmailBigLayoutState extends State<EmailBigLayout> {
   final List<Email> emailList = [];
   final EmailChangeNotifier _controller = EmailChangeNotifier();
-  final GlobalKey<AnimatedListState> _listKey = GlobalKey();
+  final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
 
   _buildEmails() {
     var future = Future(() {});
@@ -51,6 +51,7 @@ class _EmailBigLayoutState extends State<EmailBigLayout> {
     final left = widget.constraints.maxWidth > 1024
         ? widget.constraints.maxWidth / 3
         : widget.constraints.maxWidth / 2.5;
+    final showPinned = widget.constraints.maxHeight > 600;
     return Row(
       children: [
         SizedBox(
@@ -66,6 +67,7 @@ class _EmailBigLayoutState extends State<EmailBigLayout> {
                   end: Offset.zero,
                 ).animate(CurvedAnimation(
                   curve: Curves.easeOutBack,
+                  reverseCurve: Curves.easeInBack,
                   parent: animation,
                 )),
                 child: InkWell(
@@ -121,6 +123,7 @@ class _EmailBigLayoutState extends State<EmailBigLayout> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   if (_controller.pinnedEmail != null &&
+                      showPinned &&
                       _controller.pinnedEmail != _controller.selectedEmail!)
                     Expanded(
                       child: AnimatedSwitcher(
