@@ -19,9 +19,9 @@ class EmailSmallLayout extends StatefulWidget {
 }
 
 class _EmailSmallLayoutState extends State<EmailSmallLayout> {
-  final List<Email> emailList = [];
-
-  final GlobalKey<AnimatedListState> _listKey = GlobalKey();
+  List<Email> emailList = [];
+  final GlobalKey<AnimatedListState> _animatedListKey =
+      GlobalKey<AnimatedListState>();
 
   _buildEmails() {
     var future = Future(() {});
@@ -29,7 +29,7 @@ class _EmailSmallLayoutState extends State<EmailSmallLayout> {
       future = future.then((_) {
         return Future.delayed(const Duration(milliseconds: 75), () {
           emailList.add(emails[i]);
-          _listKey.currentState?.insertItem(emailList.length - 1);
+          _animatedListKey.currentState?.insertItem(emailList.length - 1);
         });
       });
     }
@@ -42,8 +42,14 @@ class _EmailSmallLayoutState extends State<EmailSmallLayout> {
   }
 
   @override
+  didChangeDependencies() {
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AnimatedList(
+      key: _animatedListKey,
       initialItemCount: emailList.length,
       itemBuilder: (context, index, animation) {
         final email = emailList[index];
@@ -53,6 +59,7 @@ class _EmailSmallLayoutState extends State<EmailSmallLayout> {
             end: Offset.zero,
           ).animate(CurvedAnimation(
             curve: Curves.easeOutBack,
+            reverseCurve: Curves.easeInBack,
             parent: animation,
           )),
           child: InkWell(
