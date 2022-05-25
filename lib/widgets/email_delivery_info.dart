@@ -14,6 +14,7 @@ class EmailDeliveryInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           DateFormat('yyyy-MM-dd').format(email.date),

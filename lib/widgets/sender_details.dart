@@ -16,10 +16,12 @@ class SenderDetails extends StatelessWidget {
       children: [
         Text(
           sender.name,
+          overflow: TextOverflow.ellipsis,
           style: Theme.of(context).textTheme.titleLarge,
         ),
         Text(
           sender.email,
+          overflow: TextOverflow.ellipsis,
           style: Theme.of(context).textTheme.titleMedium,
         ),
       ],

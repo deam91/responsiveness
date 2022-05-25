@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:responsiveness/models/models.dart';
-import 'package:responsiveness/widgets/widgets.dart';
+import 'package:responsiveness/widgets/email_header.dart';
 
 class EmailDetails extends StatelessWidget {
   const EmailDetails({
@@ -16,6 +16,7 @@ class EmailDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final stretch = MediaQuery.of(context).size.width < 850 ? true : false;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: pinned ? Colors.orange.withOpacity(.12) : Colors.white,
@@ -35,28 +36,24 @@ class EmailDetails extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment:
+              stretch ? CrossAxisAlignment.stretch : CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                SenderAvatar(
-                  sender: email.sender,
-                  radius: 30.0,
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SenderDetails(sender: email.sender),
-                  ),
-                ),
-                EmailDeliveryInfo(email: email),
-              ],
-            ),
+            stretch
+                ? FittedBox(
+                    child: EmailHeader(
+                      email: email,
+                    ),
+                  )
+                : EmailHeader(email: email),
             Padding(
               padding: const EdgeInsets.all(12.0),
-              child: Text(
-                email.subject,
-                style: Theme.of(context).textTheme.headline6,
+              child: FittedBox(
+                fit: BoxFit.fitHeight,
+                child: Text(
+                  email.subject,
+                  style: Theme.of(context).textTheme.headline6,
+                ),
               ),
             ),
             Expanded(
